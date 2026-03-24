@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "cc-cedict": "^1.1.1"
+  }
+}

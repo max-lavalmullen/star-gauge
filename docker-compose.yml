@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    image: node:20-alpine
+    container_name: star_gauge_app
+    working_dir: /app
+    restart: unless-stopped
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    # Install, Build, and Start
+    command: sh -c "cd star-guage && npm install && npm run build && npm run preview -- --host --port 3001"
+    expose:
+      - "3001"
+    ports:
+      - "3003:3001"
+    environment:
+      - NODE_ENV=production
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: star_gauge_tunnel
+    restart: unless-stopped
+    command: tunnel --url http://app:3001
+    depends_on:
+      - app
